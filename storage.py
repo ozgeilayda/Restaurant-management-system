@@ -19,3 +19,11 @@ def load_orders(data_dir: str) -> list:
            return orders
    except:
        return []   # dosya yoksa boş liste dönsün
+
+def backup_orders(data_dir: str, backup_dir: str): #siparişlerin yedeğini almak için
+   os.makedirs(backup_dir, exist_ok = True) #yedek klasörünü oluşturuyorum
+   orders = load_orders(data_dir) #mevcut siparişleri yüklüyorum
+   path = os.path.join(backup_dir, "orders_backup.json")
+   with open(path, "w") as file:
+      json.dump(orders, file, indent=4)
+   return path
