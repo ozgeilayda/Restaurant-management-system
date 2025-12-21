@@ -1,7 +1,8 @@
+import os   # klasör var mı yok mu kontrol etmek için kullandım
 from tables import initialize_tables, add_table, save_tables
 from menu import load_menu
-from orders import open_order, add_item_to_order
-import os   # klasör var mı yok mu kontrol etmek için kullandım
+from orders import open_order, add_item_to_order, calculate_bill
+from storage import save_orders, load_orders #week3
 
 DATA_DIR = "data"
 TABLE_PATH = os.path.join(DATA_DIR, "tables.json")
@@ -20,6 +21,11 @@ def prepare_data_folder(): # eğer data klasörü veya json dosyaları yoksa bur
     if not os.path.exists(MENU_PATH):
         with open(MENU_PATH, "w") as f:
             f.write('{"items":{}}')
+            
+    orders_path = os.path.join(DATA_DIR, "orders.json")
+    if not os.path.exists(orders_path):
+        with open(orders_path, "w") as f:
+            f.write("[]")
 
 
 def show_menu(): #ana menü 
@@ -27,9 +33,10 @@ def show_menu(): #ana menü
     print("1 - List Tables")
     print("2 - Add Table")
     print("3 - Load Menu")
-    print("4 - Exit")
-    print("5 - Open Order")        #week2
-    print("6 - Add Item To Order") #week2
+    print("4 - Open Order") #week2
+    print("5 - Add Item To Order")  #week2
+    print("6 - Calculate Bill") #week3
+    print("7 - Exit")  
     return input("Choice: ")
 
 
@@ -37,6 +44,7 @@ def list_tables(tables): #masaları ekrana listelemek için
     if len(tables) == 0:
         print("No tables yet.")   # hiç masa eklenmediyse bunu yazdırıyorum
         return
+        
     for table in tables: # her masayı döngüyle yazdırıyorum
         print(f"Table {table['table_number']} | Capacity: {table['capacity']} | Status: {table['status']}")
 
@@ -45,13 +53,7 @@ def add_table_cli(tables):
     capacity = int(input("Capacity: "))       # kullanıcıdan masa kapasitesini alır
 
     #masa bilgisi
-    table_data = {
-        "table_number": number,
-        "capacity": capacity,
-        "server": "",
-        "status": "free",
-        "start_time": None
-    }
+    table_data = {"table_number": number, "capacity": capacity, "server": "", "status": "free", "start_time": None}
 
     add_table(tables, table_data)   # tables.py'daki fonksiyonu çağırıyorum
     save_tables(TABLE_PATH, tables) # masayı kaydediyorum
@@ -62,7 +64,8 @@ def main():
     
     prepare_data_folder()   # önce data klasörünü kontrol ettirdim
     tables = initialize_tables(TABLE_PATH)   # masaları dosyadan yüklediö
-    menu = load_menu(MENU_PATH)             # menüyü dosyadan yükledim
+    menu = load_menu(MENU_PATH) # menüyü dosyadan yükledim
+    orders = load_orders(DATA_DIR)
 
     while True:
         choice = show_menu()
@@ -74,18 +77,15 @@ def main():
         elif choice == "3":
             print("Menu loaded. Item count:", len(menu["items"]))
         elif choice == "4":
-            print("Goodbye.")
-            break
+            
+            table_number = int(input("Table number for order: "))
+            current_order = open_order(table_number)
+            print("Order opened:", current_order)
         elif choice == "5":
-             table_number = int(input("Table number for order: "))
-             current_order = open_order(table_number)
-             print("Order opened:", current_order)
-        elif choice == "6":
             if current_order is None:
                 print("No order open.")
             else:
                 item_id = input("Menu item ID: ")
-
                 if item_id in menu["items"]:
                     menu_item = menu["items"][item_id]
                     qty = int(input("Quantity: "))
@@ -93,7 +93,23 @@ def main():
                     print("Item added.")
                 else:
                     print("Item not found in menu.")
-        
+        elif choice == "6":
+            if current_order is None:
+                print("No active order.")
+            else:
+                bill = calculate_bill(current_order, 0.08, 0.10)
+                print("Subtotal:", bill["subtotal"])
+                print("Tax:", bill["tax"])
+                print("Tip:", bill["tip"])
+                print("Total:", bill["total"])
+
+                #siparişi orders listesine ekliyorum 
+                orders.append(bill)
+                save_orders(DATA_DIR, orders)
+
+        elif choice == "7":
+            print("Goodbye.")
+            break
         else:
             print("Invalid option.")
 
