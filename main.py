@@ -3,6 +3,7 @@ from tables import initialize_tables, add_table, save_tables
 from menu import load_menu
 from orders import open_order, add_item_to_order, calculate_bill
 from storage import save_orders, load_orders #week3
+from reports import total_order_count, total_revenue #week4
 
 DATA_DIR = "data"
 TABLE_PATH = os.path.join(DATA_DIR, "tables.json")
@@ -36,7 +37,8 @@ def show_menu(): #ana menü
     print("4 - Open Order") #week2
     print("5 - Add Item To Order")  #week2
     print("6 - Calculate Bill") #week3
-    print("7 - Exit")  
+    print("7 - Show Reports")  #week4
+    print("8 - Exit") 
     return input("Choice: ")
 
 
@@ -108,6 +110,11 @@ def main():
                 save_orders(DATA_DIR, orders)
 
         elif choice == "7":
+            print("---- Reports ----")
+            print("Total orders:", total_order_count(orders))
+            print("Total revenue:", total_revenue(orders))
+
+        elif choice == "8":
             print("Goodbye.")
             break
         else:
