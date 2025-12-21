@@ -1,4 +1,4 @@
-# Bu dosya rapor almak için 
+# Bu dosya rapor almak için.
 
 #toplam kaç sipariş var
 def total_order_count(orders):
