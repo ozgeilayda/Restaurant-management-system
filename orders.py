@@ -42,3 +42,19 @@ def update_item_status(order: dict, item_id: str, status: str) -> dict:
         if it["id"] == item_id:
             it["status"] = status   # durumunu değiştiriyorum
     return order
+
+# Bu fonksiyon siparişin toplam hesabını yapıyor.
+# Vergi ve tip oranını dışarıdan alıyorum.
+def calculate_bill(order, tax_rate, tip_rate):
+   subtotal = 0
+
+   # Siparişteki her ürün için fiyat * adet hesaplıyorum
+   for item in order["items"]:
+       subtotal += item["price"] * item["qty"]
+
+   tax = subtotal * tax_rate
+   tip = subtotal * tip_rate
+   total = subtotal + tax + tip
+
+   # Hesaplanan değerleri bir dict olarak döndürüyorum
+   return {"subtotal": subtotal, "tax": tax, "tip": tip, "total": total}
