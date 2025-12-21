@@ -4,16 +4,15 @@ import os
 # Bu dosya, programdaki bilgileri json dosyalarına kaydetmek için.
 
 # Siparişleri orders.json dosyasına kaydeden fonksiyon
-def save_orders(data_dir, orders):
+def save_orders(data_dir: str, orders: list) -> None:
    path = os.path.join(data_dir, "orders.json")
 
    with open(path, "w") as file:
        json.dump(orders, file, indent=4)
 
 # Siparişleri dosyadan tekrar yüklemek için fonksiyon
-def load_orders(data_dir):
+def load_orders(data_dir: str) -> list:
    path = os.path.join(data_dir, "orders.json")
-
    try:
        with open(path, "r") as file:
            orders = json.load(file)
