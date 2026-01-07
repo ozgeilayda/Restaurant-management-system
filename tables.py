@@ -1,7 +1,7 @@
 
 import json 
-
-def initialize_tables(path: str) -> list: #dodyayı okuyup masa listesine çeviriyorum
+    #daha önce kaydedilmiş masa varsa onları yüklemek için
+def initialize_tables(path: str) -> list: #dosyayı okuyup masa listesine çeviriyorum
     try:
         with open(path, "r") as file: #dosyayı okuma modunda açıyorum
             tables = json.load(file) # json -> python listesine çeviriyorum
