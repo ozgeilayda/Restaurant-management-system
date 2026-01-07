@@ -14,7 +14,7 @@ def add_table(tables:list, table_data: dict) -> list:
     return tables
     
 def save_tables(path: str,tables: list) -> None #masayı kaydetmek için 
-    with open(path, "w") as file:
+    with open(path, "w") as file: #w dosya yoksa oluşturuyor varsa içini silip yeniden yazıyor
         json.dump(tables, file) 
 
 def assign_table(tables: list, table_number: int, party_size: int): #masayı dolu olarak atamak için
