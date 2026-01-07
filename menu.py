@@ -16,7 +16,7 @@ def add_menu_item(menu: dict, item_id: str, item_data: dict): #masaya yeni bir �
     menu["items"][item_id] = item_data  #item_data ürün bilgilerini tutan sözlük
     return menu
 
-def update_menu_item(menu: dict, item_id: str, new_dara: dict): #var olan menü ürününü güncellemek için fiyat değişirse veya ürün aktif/pasif olursa
+def update_menu_item(menu: dict, item_id: str, new_data: dict): #var olan menü ürününü güncellemek için fiyat değişirse veya ürün aktif/pasif olursa
     if item_id in menu["items"]:                              
         menu["items"][item_id].update(new_data)
         return True
