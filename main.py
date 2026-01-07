@@ -1,5 +1,5 @@
 import os   # klasör var mı yok mu kontrol etmek için kullandım
-from tables import initialize_tables, add_table, save_tables
+from tables import initialize_tables, add_table, save_tables, assign_table, release_table, update_server
 from menu import load_menu
 from orders import open_order, add_item_to_order, calculate_bill
 from storage import save_orders, load_orders #week3
