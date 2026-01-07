@@ -5,7 +5,7 @@ from orders import open_order, add_item_to_order, calculate_bill
 from storage import save_orders, load_orders #week3
 from reports import total_order_count, total_revenue #week4
 
-DATA_DIR = "data"
+DATA_DIR = "data" #tüm verilerin tutulacağı klasör
 TABLE_PATH = os.path.join(DATA_DIR, "tables.json")
 MENU_PATH = os.path.join(DATA_DIR, "menu.json")
 
@@ -26,7 +26,7 @@ def prepare_data_folder(): # eğer data klasörü veya json dosyaları yoksa bur
     orders_path = os.path.join(DATA_DIR, "orders.json")
     if not os.path.exists(orders_path):
         with open(orders_path, "w") as f:
-            f.write("[]")
+            f.write("[]") #dosyanın içine boş liste yazıyorum
 
 
 def show_menu(): #ana menü 
